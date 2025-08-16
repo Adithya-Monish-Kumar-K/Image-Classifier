@@ -1,0 +1,9 @@
+torch
+torchvision
+torchaudio
+tensorflow
+scikit-learn
+pillow
+matplotlib
+tqdm
+python-dotenv
