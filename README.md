@@ -1,4 +1,4 @@
-# Image Classification (Cats vs Dogs)
+# Image Classifier (Cats vs Dogs)
 
 A transfer learning project using PyTorch to classify images of cats and dogs (Kaggle Cats and Dogs dataset) with a ResNet18 backbone.
 
