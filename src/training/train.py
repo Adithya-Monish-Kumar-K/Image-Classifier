@@ -15,6 +15,9 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device):
     preds_all = []
     targets_all = []
     for images, labels in dataloader:
+        # Skip empty batches (could happen if all items in a batch were corrupt and filtered out)
+        if images.numel() == 0:
+            continue
         images, labels = images.to(device), labels.to(device)
         optimizer.zero_grad()
         outputs = model(images)
@@ -36,6 +39,8 @@ def evaluate(model, dataloader, criterion, device):
     targets_all = []
     with torch.no_grad():
         for images, labels in dataloader:
+            if images.numel() == 0:
+                continue
             images, labels = images.to(device), labels.to(device)
             outputs = model(images)
             loss = criterion(outputs, labels)
@@ -57,6 +62,7 @@ def main():
     parser.add_argument('--freeze_backbone', action='store_true')
     parser.add_argument('--unfreeze', action='store_true', help='If set, unfreeze backbone regardless of freeze_backbone flag')
     parser.add_argument('--output_dir', type=str, default='models')
+    parser.add_argument('--no_skip_corrupt', action='store_true', help='Process all images and error on corrupt ones')
     parser.add_argument('--seed', type=int, default=42)
     args = parser.parse_args()
 
@@ -64,7 +70,12 @@ def main():
     device = get_device()
     print(f"Using device: {device}")
 
-    dataloaders, class_names = create_dataloaders(args.data_dir, img_size=args.img_size, batch_size=args.batch_size)
+    dataloaders, class_names = create_dataloaders(
+        args.data_dir,
+        img_size=args.img_size,
+        batch_size=args.batch_size,
+        skip_corrupt=not args.no_skip_corrupt,
+    )
     model = build_model(num_classes=len(class_names), freeze_backbone=args.freeze_backbone and not args.unfreeze)
 
     if args.unfreeze:

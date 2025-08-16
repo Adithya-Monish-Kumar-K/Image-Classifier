@@ -15,8 +15,6 @@ A transfer learning project using PyTorch to classify images of cats and dogs (K
 │   │   └── evaluate.py  # Evaluation helpers
 │   ├── infer.py         # Inference script for single images
 │   └── utils.py         # Utility helpers (seed, device, metrics)
-├── notebooks/
-│   └── exploration.ipynb
 ├── requirements.txt
 └── README.md
 ```
@@ -47,9 +45,3 @@ python -m src.infer --model_path models/best_model.pt --image path/to/image.jpg
 - Uses pretrained ResNet18 with final layer replaced.
 - Freezes early layers by default (can unfreeze with flag).
 - Saves best model by validation accuracy.
-
-## Next Steps / Extensions
-- Add mixed precision training
-- Experiment with other architectures (EfficientNet / ViT)
-- Add TensorBoard logging
-- Deploy as a FastAPI service
